@@ -1,0 +1,25 @@
+version: "3"
+services:
+  dataox-task-application-postgres:
+    container_name: dataox-task-application-postgres
+    image: postgres:16beta1-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass23
+      POSTGRES_DB: dataox-task-db
+    volumes:
+      - dataox-postgres-data:/var/lib/postgresql/data
+  dataox-task-application:
+    container_name: "dataox-task-application"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dataox-task-application
+    ports:
+      - "8080:8080"
+    depends_on:
+      - dataox-task-application-postgres
+volumes:
+  dataox-postgres-data:
